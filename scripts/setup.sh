@@ -32,8 +32,7 @@ apt install -qqy --no-install-recommends \
     wireguard-tools \
     wpasupplicant \
     bash-completion \
-    curl \
-    iperf3
+    curl 
 
 # Cleanup
 apt clean

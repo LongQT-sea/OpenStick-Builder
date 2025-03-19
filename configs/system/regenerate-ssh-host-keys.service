@@ -5,8 +5,7 @@ Before=network-pre.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/sbin/dpkg-reconfigure openssh-server
-RemainAfterExit=yes
+ExecStart=/usr/bin/ssh-keygen -A -v
 
 [Install]
 WantedBy=sysinit.target
