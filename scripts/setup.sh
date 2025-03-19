@@ -32,12 +32,41 @@ apt install -qqy --no-install-recommends \
     wireguard-tools \
     wpasupplicant \
     bash-completion \
-    curl
+    curl \
+    iperf3
+
+# Cleanup
 apt clean
 rm -rf /var/lib/apt/lists/*
+rm /etc/machine-id
+rm -f /etc/ssh/ssh_host_*
+find /var/log -type f -delete
+rm -f /root/.bash_history
 
-passwd -d root
+passwd -dl root
 
-echo user:1::::/home/user:/bin/bash | newusers
-echo 'user ALL=(ALL:ALL) NOPASSWD: ALL' > /etc/sudoers.d/user
+# Add user
+adduser --disabled-password --comment "" user
+# Set password
+passwd user << EOD
+1
+1
+EOD
+# Add user to sudo group
+usermod -aG sudo user
+
+cat <<EOF >>/etc/bash.bashrc
+
+alias ls='ls --color=auto -lh'
+alias ll='ls --color=auto -lhA'
+alias l='ls --color=auto -l'
+alias cl='clear'
+alias ip='ip --color'
+alias bridge='bridge -color'
+alias free='free -h'
+alias df='df -h'
+alias du='du -hs'
+
+EOF
+
 

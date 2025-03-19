@@ -2,7 +2,7 @@
 
 CHROOT=${CHROOT=$(pwd)/rootfs}
 RELEASE=${RELEASE=stable}
-HOST_NAME=${HOST_NAME=openstick-debian}
+HOST_NAME=${HOST_NAME=openstick}
 
 rm -rf ${CHROOT}
 
@@ -58,15 +58,10 @@ cp -a configs/system/* ${CHROOT}/etc/systemd/system
 
 cp -a scripts/msm-firmware-loader.sh ${CHROOT}/usr/sbin
 
-# setup NetworkManager
+# setup Modem with NetworkManager
 cp configs/*.nmconnection ${CHROOT}/etc/NetworkManager/system-connections
 chmod 0600 ${CHROOT}/etc/NetworkManager/system-connections/*
 cp configs/99-unmanaged-devices.conf ${CHROOT}/etc/NetworkManager/conf.d/99-unmanaged-devices.conf
-
-# enable autoconnect for usb0
-#cat << EOF > ${CHROOT}/etc/udev/rules.d/99-nm-usb0.rules
-#SUBSYSTEM=="net", ACTION=="add|change|move", ENV{DEVTYPE}=="gadget", ENV{NM_UNMANAGED}="0"
-#EOF
 
 # install kernel
 wget -O - http://mirror.postmarketos.org/postmarketos/v24.12/aarch64/linux-postmarketos-qcom-msm8916-6.12.1-r0.apk \

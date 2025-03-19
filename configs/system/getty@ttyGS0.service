@@ -4,7 +4,7 @@ After=mobile-usb-gadget.service
 Requires=mobile-usb-gadget.service
 
 [Service]
-ExecStart=-/sbin/agetty -L %I 115200 vt100
+ExecStart=-/sbin/agetty --autologin root -L %I 115200 vt100
 Restart=always
 RestartSec=0
 UtmpIdentifier=%I

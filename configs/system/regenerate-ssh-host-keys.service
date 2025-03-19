@@ -1,0 +1,12 @@
+[Unit]
+Description=Regenerate SSH host keys
+ConditionPathExists=!/etc/ssh/ssh_host_rsa_key
+Before=network-pre.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/dpkg-reconfigure openssh-server
+RemainAfterExit=yes
+
+[Install]
+WantedBy=sysinit.target
