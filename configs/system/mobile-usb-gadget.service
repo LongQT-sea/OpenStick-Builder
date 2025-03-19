@@ -1,0 +1,14 @@
+[Unit]
+Description=Mobile USB Gadget Setup
+Requires=sysinit.target
+After=sysinit.target
+Before=getty@ttyGS0.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/mobile-usb-gadget.sh setup
+ExecStop=/usr/sbin/mobile-usb-gadget.sh reset
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,18 @@
+[Unit]
+Description=Login shell on %I
+After=mobile-usb-gadget.service
+Requires=mobile-usb-gadget.service
+
+[Service]
+ExecStart=-/sbin/agetty -L %I 115200 vt100
+Restart=always
+RestartSec=0
+UtmpIdentifier=%I
+TTYPath=/dev/%I
+TTYReset=yes
+TTYVHangup=yes
+KillMode=process
+IgnoreSIGPIPE=no
+
+[Install]
+WantedBy=multi-user.target

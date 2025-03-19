@@ -39,6 +39,20 @@ echo -n > ${CHROOT}/root/.bash_history
 echo ${HOST_NAME} > ${CHROOT}/etc/hostname
 sed -i "/localhost/ s/$/ ${HOST_NAME}/" ${CHROOT}/etc/hosts
 
+# setup hostapd
+cp -a configs/hostapd.conf ${CHROOT}/etc/hostapd/hostapd.conf
+
+# setup dnsmasq
+cp -a configs/dhcp.conf ${CHROOT}/etc/dnsmasq.d/dhcp.conf
+
+# setup rc-local
+cp -a configs/rc.local ${CHROOT}/etc/rc.local
+chmod +x ${CHROOT}/etc/rc.local
+
+# setup USB gadget script
+cp -a configs/mobile-usb-gadget.sh ${CHROOT}/usr/sbin/mobile-usb-gadget.sh
+chmod +x ${CHROOT}/usr/sbin/mobile-usb-gadget.sh
+
 # setup systemd services
 cp -a configs/system/* ${CHROOT}/etc/systemd/system
 
@@ -47,15 +61,14 @@ cp -a scripts/msm-firmware-loader.sh ${CHROOT}/usr/sbin
 # setup NetworkManager
 cp configs/*.nmconnection ${CHROOT}/etc/NetworkManager/system-connections
 chmod 0600 ${CHROOT}/etc/NetworkManager/system-connections/*
-sed -i '/\[main\]/a dns=dnsmasq' ${CHROOT}/etc/NetworkManager/NetworkManager.conf
 
 # enable autoconnect for usb0
-cat << EOF > ${CHROOT}/etc/udev/rules.d/99-nm-usb0.rules
-SUBSYSTEM=="net", ACTION=="add|change|move", ENV{DEVTYPE}=="gadget", ENV{NM_UNMANAGED}="0"
-EOF
+#cat << EOF > ${CHROOT}/etc/udev/rules.d/99-nm-usb0.rules
+#SUBSYSTEM=="net", ACTION=="add|change|move", ENV{DEVTYPE}=="gadget", ENV{NM_UNMANAGED}="0"
+#EOF
 
 # install kernel
-wget -O - http://mirror.postmarketos.org/postmarketos/v24.06/aarch64/linux-postmarketos-qcom-msm8916-6.6-r5.apk \
+wget -O - http://mirror.postmarketos.org/postmarketos/v24.12/aarch64/linux-postmarketos-qcom-msm8916-6.12.1-r0.apk \
     | tar xkzf - -C ${CHROOT} --exclude=.PKGINFO --exclude=.SIGN* 2>/dev/null
 
 mkdir -p ${CHROOT}/boot/extlinux
