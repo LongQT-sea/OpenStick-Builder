@@ -22,6 +22,4 @@ apt install -y \
     python3-pycryptodome \
     qemu-user-static \
     unzip \
-    wget \
-    hostapd \
-    curl 
+    wget 

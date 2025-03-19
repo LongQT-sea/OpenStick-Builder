@@ -40,7 +40,7 @@ echo ${HOST_NAME} > ${CHROOT}/etc/hostname
 sed -i "/localhost/ s/$/ ${HOST_NAME}/" ${CHROOT}/etc/hosts
 
 # setup hostapd
-cp -a configs/hostapd.conf ${CHROOT}/etc/hostapd/hostapd.conf
+cp -a configs/hostapd.conf ${CHROOT}/etc/hostapd/wlan0.conf
 
 # setup dnsmasq
 cp -a configs/dhcp.conf ${CHROOT}/etc/dnsmasq.d/dhcp.conf
@@ -61,6 +61,7 @@ cp -a scripts/msm-firmware-loader.sh ${CHROOT}/usr/sbin
 # setup NetworkManager
 cp configs/*.nmconnection ${CHROOT}/etc/NetworkManager/system-connections
 chmod 0600 ${CHROOT}/etc/NetworkManager/system-connections/*
+cp configs/99-unmanaged-devices.conf ${CHROOT}/etc/NetworkManager/conf.d/99-unmanaged-devices.conf
 
 # enable autoconnect for usb0
 #cat << EOF > ${CHROOT}/etc/udev/rules.d/99-nm-usb0.rules

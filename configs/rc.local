@@ -1,16 +1,8 @@
 #!/bin/bash
 
 main() {
-    cleanup_wwan
     setup_bridge
-}
-
-cleanup_wwan() {
-    ip netns add null || true
-    sleep 5
-    for i in wwan1 wwan2 wwan3 wwan4 wwan5 wwan6 wwan7; do
-        ip link set "$i" netns null
-    done
+    cleanup_wwan
 }
 
 setup_bridge() {
@@ -35,6 +27,14 @@ setup_bridge() {
 
     iptables -t nat -A POSTROUTING -s 192.168.100.0/24 ! -d 192.168.100.0/24 -j MASQUERADE
     ip6tables -t nat -A POSTROUTING -s fd6b:741c:1156::/64 ! -d fd6b:741c:1156::/64 -j MASQUERADE
+}
+
+cleanup_wwan() {
+    ip netns add null || true
+    sleep 6
+    for i in wwan1 wwan2 wwan3 wwan4 wwan5 wwan6 wwan7; do
+        ip link set "$i" netns null
+    done
 }
 
 main

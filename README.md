@@ -11,7 +11,7 @@ This builder uses the precompiled [kernel](https://pkgs.postmarketos.org/package
 This has been tested to work on **Ubuntu 22.04**
 - clone
   ```shell
-  git clone --recurse-submodules https://github.com/kinsamanka/OpenStick-Builder.git
+  git clone --recurse-submodules https://github.com/LongQT-sea/OpenStick-Builder.git
   cd OpenStick-Builder/
   ```
 #### Quick
