@@ -32,7 +32,8 @@ apt install -qqy --no-install-recommends \
     wireguard-tools \
     wpasupplicant \
     bash-completion \
-    curl 
+    curl \
+    zram-tools
 
 # Cleanup
 apt clean
