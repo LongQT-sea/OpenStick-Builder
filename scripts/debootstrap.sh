@@ -25,6 +25,8 @@ mount -o bind /dev/ ${CHROOT}/dev/
 mount -o bind /dev/pts/ ${CHROOT}/dev/pts/
 mount -o bind /run ${CHROOT}/run/
 
+# chroot setup
+cp configs/install_dnsproxy.sh ${CHROOT}
 cp scripts/setup.sh ${CHROOT}
 chroot ${CHROOT} qemu-aarch64-static /bin/sh -c /setup.sh
 
@@ -33,21 +35,26 @@ for a in proc sys dev/pts dev run; do
     umount ${CHROOT}/${a}
 done;
 
+rm ${CHROOT}/install_dnsproxy.sh
 rm -f ${CHROOT}/setup.sh
 echo -n > ${CHROOT}/root/.bash_history
 
 echo ${HOST_NAME} > ${CHROOT}/etc/hostname
 sed -i "/localhost/ s/$/ ${HOST_NAME}/" ${CHROOT}/etc/hosts
 
-# setup hostapd
-cp -a configs/hostapd.conf ${CHROOT}/etc/hostapd/wlan0.conf
-
 # setup dnsmasq
 cp -a configs/dhcp.conf ${CHROOT}/etc/dnsmasq.d/dhcp.conf
+cat <<EOF >> ${CHROOT}/etc/hosts
+
+192.168.100.1	${HOST_NAME} ${HOST_NAME}.lan
+EOF
 
 # setup rc-local
 cp -a configs/rc.local ${CHROOT}/etc/rc.local
 chmod +x ${CHROOT}/etc/rc.local
+
+# setup interfaces
+cp -a configs/interfaces ${CHROOT}/etc/network/
 
 # setup USB gadget script
 cp -a configs/mobile-usb-gadget.sh ${CHROOT}/usr/sbin/mobile-usb-gadget.sh
@@ -58,7 +65,7 @@ cp -a configs/system/* ${CHROOT}/etc/systemd/system
 
 cp -a scripts/msm-firmware-loader.sh ${CHROOT}/usr/sbin
 
-# setup Modem with NetworkManager
+# setup NetworkManager
 cp configs/*.nmconnection ${CHROOT}/etc/NetworkManager/system-connections
 chmod 0600 ${CHROOT}/etc/NetworkManager/system-connections/*
 cp configs/99-unmanaged-devices.conf ${CHROOT}/etc/NetworkManager/conf.d/99-unmanaged-devices.conf

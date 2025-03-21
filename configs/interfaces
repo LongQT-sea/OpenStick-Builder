@@ -1,0 +1,39 @@
+# interfaces(5) file used by ifup(8) and ifdown(8)
+# Include files from /etc/network/interfaces.d:
+source /etc/network/interfaces.d/*
+
+auto lo
+iface lo inet loopback
+
+auto usb0
+iface usb0 inet manual
+
+auto usb1
+iface usb1 inet manual
+
+auto br0
+iface br0 inet static
+        address 192.168.100.1/24
+        bridge-ports usb0 usb1
+        bridge-stp off
+        bridge-vlan-aware yes
+        bridge-vids 1 10 20 30 100 1111
+
+        # Enable forward and NAT
+        up      sysctl -w net.ipv4.ip_forward=1
+        up      iptables -t nat -A POSTROUTING -s 192.168.100.0/24 ! -d 192.168.100.0/24 -j MASQUERADE
+
+	# Prevent DNS leaks
+        up      iptables -t nat -A PREROUTING -i br0 -p udp --dport 53 -j REDIRECT --to-ports 53
+        up      iptables -t nat -A PREROUTING -i br0 -p tcp --dport 53 -j REDIRECT --to-ports 53
+
+iface br0 inet6 static
+        address fd6b:741c:1156::1/64
+
+        # Enable forward and NAT
+        up      sysctl -w net.ipv6.conf.all.forwarding=1
+        up      ip6tables -t nat -A POSTROUTING -s fd6b:741c:1156::/64 ! -d fd6b:741c:1156::/64 -j MASQUERADE
+
+        # Prevent DNS leaks
+        up      ip6tables -t nat -A PREROUTING -i br0 -p udp --dport 53 -j REDIRECT --to-ports 53
+        up      ip6tables -t nat -A PREROUTING -i br0 -p tcp --dport 53 -j REDIRECT --to-ports 53

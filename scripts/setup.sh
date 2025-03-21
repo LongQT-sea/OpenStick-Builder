@@ -15,7 +15,6 @@ apt autoremove -qqy
 apt install -qqy --no-install-recommends \
     bridge-utils \
     dnsmasq \
-    hostapd \
     iptables \
     libconfig9 \
     locales \
@@ -33,15 +32,19 @@ apt install -qqy --no-install-recommends \
     wpasupplicant \
     bash-completion \
     curl \
-    zram-tools
+    ca-certificates \
+    zram-tools \
+    bc \
+    ifupdown2 \
+    mobile-broadband-provider-info
 
 # Cleanup
 apt clean
 rm -rf /var/lib/apt/lists/*
 rm /etc/machine-id
-rm -f /etc/ssh/ssh_host_*
+rm /var/lib/dbus/machine-id
+rm /etc/ssh/ssh_host_*
 find /var/log -type f -delete
-rm -f /root/.bash_history
 
 passwd -dl root
 
@@ -70,3 +73,10 @@ alias du='du -hs'
 EOF
 
 
+cat <<EOF >> /etc/systemd/journald.conf
+SystemMaxUse=500M
+SystemKeepFree=2G
+EOF
+
+# install dnsproxy
+bash /install_dnsproxy.sh

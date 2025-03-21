@@ -1,5 +1,5 @@
 #!/bin/sh
-# https://gist.github.com/Leo-PL/1ee48d132bc7a7ccd4657ea1ed7badd8#file-mobile-usb-network-setup-L11
+https://gist.github.com/Leo-PL/1ee48d132bc7a7ccd4657ea1ed7badd8#file-mobile-usb-network-setup-L11
 
 CONFIGFS=/sys/kernel/config/usb_gadget/g1
 USB_VENDORID="0x1D6B"  # Linux Foundation
