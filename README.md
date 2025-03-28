@@ -158,10 +158,7 @@ Edit [`scripts/setup.sh`](scripts/setup.sh) to add/remove packages. Note that th
      - `jz01-45-v33` for **JZxxx** boards
      - `fy-mf800` for **MF800** boards
 
-- To maximize the `rootfs` partition
-  ```shell
-  resize2fs /dev/disk/by-partlabel/rootfs
-  ```
+- The `rootfs` partition is grown to fill the disk automatically on first boot.
 
 - To update the kernel of the `debian` image
   ```shell
