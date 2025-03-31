@@ -26,6 +26,7 @@ mount -o bind /dev/pts/ ${CHROOT}/dev/pts/
 mount -o bind /run ${CHROOT}/run/
 
 cp scripts/setup.sh ${CHROOT}
+cp scripts/install_dnsproxy.sh ${CHROOT}
 chroot ${CHROOT} qemu-aarch64-static /bin/sh -c /setup.sh
 
 # cleanup
@@ -34,6 +35,7 @@ for a in proc sys dev/pts dev run; do
 done;
 
 rm -f ${CHROOT}/setup.sh
+rm -f ${CHROOT}/install_dnsproxy.sh
 echo -n > ${CHROOT}/root/.bash_history
 
 echo ${HOST_NAME} > ${CHROOT}/etc/hostname

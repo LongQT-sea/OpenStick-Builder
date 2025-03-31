@@ -14,6 +14,8 @@ apt upgrade -qqy
 apt autoremove -qqy
 apt install -qqy --no-install-recommends \
     bridge-utils \
+    ca-certificates \
+    curl \
     dnsmasq \
     hostapd \
     iptables \
@@ -33,6 +35,9 @@ apt install -qqy --no-install-recommends \
     wpasupplicant
 apt clean
 rm -rf /var/lib/apt/lists/*
+
+# install dnsproxy (DNS-over-HTTPS/QUIC resolver, listens on 127.0.0.1:5353)
+bash /install_dnsproxy.sh
 
 passwd -d root
 
