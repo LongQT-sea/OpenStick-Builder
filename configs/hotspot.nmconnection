@@ -2,10 +2,14 @@
 id=hotspot
 uuid=4e35e5da-f566-46e1-9d90-8bdc0adde58f
 type=wifi
+autoconnect=true
 interface-name=wlan0
+master=br0
+slave-type=bridge
 
 [wifi]
 band=bg
+channel=1
 mode=ap
 ssid=Openstick
 
@@ -17,8 +21,7 @@ proto=rsn;
 psk=openstick
 
 [ipv4]
-address1=192.168.4.1/24
-method=shared
+method=disabled
 
 [ipv6]
 addr-gen-mode=default

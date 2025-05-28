@@ -15,7 +15,7 @@ apt autoremove -qqy
 apt install -qqy --no-install-recommends \
     bridge-utils \
     dnsmasq \
-    hostapd \
+    ifupdown2 \
     iptables \
     libconfig9 \
     locales \
@@ -38,3 +38,10 @@ passwd -d root
 
 echo user:1::::/home/user:/bin/bash | newusers
 echo 'user ALL=(ALL:ALL) NOPASSWD: ALL' > /etc/sudoers.d/user
+
+# bridged networking is brought up by ifupdown, not networkd
+systemctl mask systemd-networkd-wait-online.service
+
+# enable IPv4 and IPv6 forwarding for routing
+sed -i -e 's/^#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/' \
+    -e 's/^#net.ipv6.conf.all.forwarding=1/net.ipv6.conf.all.forwarding=1/' /etc/sysctl.conf

@@ -129,16 +129,15 @@ Edit [`scripts/setup.sh`](scripts/setup.sh) to add/remove packages. Note that th
 
 ## Post-Install
 - Network configuration
-  
-  | wlan0 | |
+
+  The `wlan0`, `usb0` and `usb1` interfaces are bridged into `br0`, which
+  serves DHCP and DNS to connected clients.
+
+  | br0 | |
   | ----- | ---- |
   | ssid | Openstick |
   | password | openstick |
-  | ip addr | 192.168.4.1 |
-
-  | usb0 | |
-  | ----- | ---- |
-  | ip addr | 192.168.5.1 |
+  | ip addr | 192.168.100.1 |
 
 - Default user
   

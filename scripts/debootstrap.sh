@@ -39,6 +39,27 @@ echo -n > ${CHROOT}/root/.bash_history
 echo ${HOST_NAME} > ${CHROOT}/etc/hostname
 sed -i "/localhost/ s/$/ ${HOST_NAME}/" ${CHROOT}/etc/hosts
 
+# setup dnsmasq
+cp -a configs/dhcp.conf ${CHROOT}/etc/dnsmasq.d/dhcp.conf
+
+cat <<EOF > ${CHROOT}/etc/resolv.conf
+search lan
+nameserver 127.0.0.1
+options edns0 trust-ad
+EOF
+
+cat <<EOF >> ${CHROOT}/etc/hosts
+
+192.168.100.1	${HOST_NAME}
+EOF
+
+# add rc-local
+cp -a configs/rc.local ${CHROOT}/etc/rc.local
+chmod +x ${CHROOT}/etc/rc.local
+
+# add bridged networking (ifupdown2)
+cp -a configs/interfaces ${CHROOT}/etc/network/
+
 # setup systemd services
 cp -a configs/system/* ${CHROOT}/etc/systemd/system
 
@@ -47,7 +68,7 @@ cp -a scripts/msm-firmware-loader.sh ${CHROOT}/usr/sbin
 # setup NetworkManager
 cp configs/*.nmconnection ${CHROOT}/etc/NetworkManager/system-connections
 chmod 0600 ${CHROOT}/etc/NetworkManager/system-connections/*
-sed -i '/\[main\]/a dns=dnsmasq' ${CHROOT}/etc/NetworkManager/NetworkManager.conf
+cp configs/99-custom.conf ${CHROOT}/etc/NetworkManager/conf.d/
 
 # enable autoconnect for usb0
 cat << EOF > ${CHROOT}/etc/udev/rules.d/99-nm-usb0.rules
